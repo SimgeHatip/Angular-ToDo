@@ -1,0 +1,63 @@
+<h1 class="pt-5">{{mainTitle}}</h1>
+
+<form (ngSubmit)="addTodo(myForm)" #myForm="ngForm" ngNativeValidate>
+    <label for="userInput" class="m-5">Add Task</label>
+    <input placeholder="Write a task" ngModel name="userInput" required />
+    <label for="date" class="m-5">Pick a Date</label>
+    <input type="date" name="date" min="{{formatDate()}}" ngModel />
+    <button type="submit" class="m-5 btn btn-primary">Add</button>
+</form>
+
+<div class="container-fluid row my-auto">
+    <div class="col card m-2 p-3">
+        <h4>Passed Tasks</h4>
+        <ul *ngFor="let todo of passed">
+            <div class="row mt-3 task">
+                <div class="col-6">
+                    <li>{{todo.title}} </li>
+                </div>
+                <div class="col-4">
+                    <li>{{todo.date}}</li>
+                </div>
+                <div class="col-2">
+                    <button (click)="onDelete(todo.id)" class="btn btn-danger"> <i class="bi bi-trash3"></i></button>
+                </div>
+            </div>
+        </ul>
+    </div>
+    <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="todos" [cdkDropListConnectedTo]="[doneList]"
+        class="example-list" (cdkDropListDropped)="drop($event)" class="col card m-2 p-3">
+        <h4>Currently To Do's</h4>
+        <ul *ngFor="let todo of todos" cdkDrag>
+            <div class="row mt-3 task">
+                <div class="col-6">
+                    <li>{{todo.title}} </li>
+                </div>
+                <div class="col-4">
+                    <li>{{todo.date}}</li>
+                </div>
+                <div class="col-2">
+                    <button (click)="onDelete(todo.id)" class="btn btn-danger ">
+                        <i class="bi bi-trash3"></i></button>
+                </div>
+            </div>
+        </ul>
+    </div>
+    <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="done" [cdkDropListConnectedTo]="[todoList]"
+        class="example-list" (cdkDropListDropped)="drop($event)" class="col card m-2 p-3">
+        <h4>Completed Tasks</h4>
+        <ul *ngFor="let todo of done" cdkDrag>
+            <div class="row mt-3 task">
+                <div class="col-6">
+                    <li>{{todo.title}} </li>
+                </div>
+                <div class="col-4">
+                    <li>{{todo.date}}</li>
+                </div>
+                <div class="col-2">
+                    <button (click)="onDelete(todo.id)" class="btn btn-danger"> <i class="bi bi-trash3"></i></button>
+                </div>
+            </div>
+        </ul>
+    </div>
+</div>
