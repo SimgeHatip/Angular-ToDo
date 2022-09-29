@@ -20,22 +20,20 @@
 
 </form>
 
-<div class="container-fluid row my-auto">
+<div class="container">
     <div class=" card passed-container">
         <h3>EXPIRED TASKS</h3>
         <ul *ngFor="let todo of passed">
             <div class="task">
-                <div class="col-10">
+                <div class="todo-list-element">
                     <li>{{todo.title}} </li>
                     <li>{{todo.date}}</li>
                 </div>
-                <div class="">
-                    <div class="example-button-container">
-                        <button (click)="onDelete(todo)" mat-mini-fab color="warn"
-                            aria-label="Example icon button with a menu icon">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </div>
+                <div class="example-button-container">
+                    <button (click)="onDelete(todo)" mat-mini-fab color="warn"
+                        aria-label="Example icon button with a menu icon">
+                        <mat-icon>delete</mat-icon>
+                    </button>
                 </div>
             </div>
         </ul>
@@ -45,8 +43,9 @@
         <h3>CURRENTLTY TO DO'S</h3>
         <ul *ngFor="let todo of todos" cdkDrag>
             <div class="task">
-                <div class="col-10">
-                    <mat-checkbox id={{todo.id}} [(ngModel)]="todo.completed"  [checked]="todo.completed" (click)="changeStatus(todo)" color="primary">
+                <div class="todo-list-element">
+                    <mat-checkbox id={{todo.id}} [(ngModel)]="todo.completed" [checked]="todo.completed"
+                        (click)="changeStatus(todo)" color="primary">
                         <li>{{todo.title}} </li>
                         <li>{{todo.date}}</li>
                     </mat-checkbox>
@@ -68,8 +67,9 @@
         <h3>COMPLATED TASKS</h3>
         <ul *ngFor="let todo of done" cdkDrag>
             <div class="task">
-                <div class="">
-                    <mat-checkbox id={{todo.id}} [(ngModel)]="todo.completed"  [checked]="todo.completed" (click)="changeStatus(todo)" color="primary">
+                <div class="todo-list-element">
+                    <mat-checkbox id={{todo.id}} [(ngModel)]="todo.completed" [checked]="todo.completed"
+                        (click)="changeStatus(todo)" color="primary">
                         <li>{{todo.title}} </li>
                         <li>{{todo.date}}</li>
                     </mat-checkbox>
