@@ -1,61 +1,86 @@
-<h1 class="pt-5">{{mainTitle}}</h1>
-
+<h1 class="">{{mainTitle}}</h1>
 <form (ngSubmit)="addTodo(myForm)" #myForm="ngForm" ngNativeValidate>
-    <label for="userInput" class="m-5">Add Task</label>
-    <input placeholder="Write a task" ngModel name="userInput" required />
-    <label for="date" class="m-5">Pick a Date</label>
-    <input type="date" name="date" min="{{formatDate()}}" ngModel />
-    <button type="submit" class="m-5 btn btn-primary">Add</button>
+    <div class="example-container">
+        <mat-form-field appearance="fill">
+            <mat-label>Type your task!</mat-label>
+            <input matInput placeholder="Write a task" ngModel name="userInput" required="" #task>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" name="date" min="{{formatDate()}}" ngModel>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <div class="button-container">
+            <button mat-stroked-button (click)="openSnackBar(task.value)" mat-flat-button color="primary">Add</button>
+        </div>
+    </div>
+
 </form>
 
 <div class="container-fluid row my-auto">
-    <div class="col card m-2 p-3">
-        <h4>Passed Tasks</h4>
+    <div class=" card passed-container">
+        <h3>EXPIRED TASKS</h3>
         <ul *ngFor="let todo of passed">
-            <div class="row mt-3 task">
-                <div class="col-6">
+            <div class="task">
+                <div class="col-10">
                     <li>{{todo.title}} </li>
-                </div>
-                <div class="col-4">
                     <li>{{todo.date}}</li>
                 </div>
-                <div class="col-2">
-                    <button (click)="onDelete(todo.id)" class="btn btn-danger"> <i class="bi bi-trash3"></i></button>
+                <div class="">
+                    <div class="example-button-container">
+                        <button (click)="onDelete(todo)" mat-mini-fab color="warn"
+                            aria-label="Example icon button with a menu icon">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
                 </div>
             </div>
         </ul>
     </div>
     <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="todos" [cdkDropListConnectedTo]="[doneList]"
-        class="example-list" (cdkDropListDropped)="drop($event)" class="col card m-2 p-3">
-        <h4>Currently To Do's</h4>
+        class="example-list" (cdkDropListDropped)="drop($event)" class="col card m-2 p-3 todo-container">
+        <h3>CURRENTLTY TO DO'S</h3>
         <ul *ngFor="let todo of todos" cdkDrag>
-            <div class="row mt-3 task">
-                <div class="col-6">
-                    <li>{{todo.title}} </li>
+            <div class="task">
+                <div class="col-10">
+                    <mat-checkbox id={{todo.id}} [(ngModel)]="todo.completed"  [checked]="todo.completed" (click)="changeStatus(todo)" color="primary">
+                        <li>{{todo.title}} </li>
+                        <li>{{todo.date}}</li>
+                    </mat-checkbox>
                 </div>
-                <div class="col-4">
-                    <li>{{todo.date}}</li>
-                </div>
-                <div class="col-2">
-                    <button (click)="onDelete(todo.id)" class="btn btn-danger ">
-                        <i class="bi bi-trash3"></i></button>
+                <div class="">
+                    <div class="example-button-container">
+
+                        <button (click)="onDelete(todo)" mat-mini-fab color="warn"
+                            aria-label="Example icon button with a menu icon">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
                 </div>
             </div>
         </ul>
     </div>
     <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="done" [cdkDropListConnectedTo]="[todoList]"
-        class="example-list" (cdkDropListDropped)="drop($event)" class="col card m-2 p-3">
-        <h4>Completed Tasks</h4>
+        class="example-list" (cdkDropListDropped)="drop($event)" class="card completed-container">
+        <h3>COMPLATED TASKS</h3>
         <ul *ngFor="let todo of done" cdkDrag>
-            <div class="row mt-3 task">
-                <div class="col-6">
-                    <li>{{todo.title}} </li>
+            <div class="task">
+                <div class="">
+                    <mat-checkbox id={{todo.id}} [(ngModel)]="todo.completed"  [checked]="todo.completed" (click)="changeStatus(todo)" color="primary">
+                        <li>{{todo.title}} </li>
+                        <li>{{todo.date}}</li>
+                    </mat-checkbox>
                 </div>
-                <div class="col-4">
-                    <li>{{todo.date}}</li>
-                </div>
-                <div class="col-2">
-                    <button (click)="onDelete(todo.id)" class="btn btn-danger"> <i class="bi bi-trash3"></i></button>
+                <div class="">
+                    <div class="example-button-container">
+                        <button (click)="onDelete(todo)" mat-mini-fab color="warn"
+                            aria-label="Example icon button with a menu icon">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
                 </div>
             </div>
         </ul>
