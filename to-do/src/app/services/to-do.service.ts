@@ -1,5 +1,7 @@
+import { TypeofExpr } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import * as Bucket from '@spica-devkit/bucket'
+import { RealtimeConnection } from '@spica-devkit/bucket';
 import { from, Observable } from 'rxjs';
 import { ToDo } from '../models/todo';
 
@@ -12,26 +14,41 @@ export class ToDoService {
   constructor() { }
 
 
-  getTodos(): Observable<ToDo[]> {
+  getTodos(): RealtimeConnection<ToDo[]> {
     Bucket.initialize({ apikey: "dfv2d18l8o719ud", publicUrl: "https://master.spicaengine.com/api" })
-
-    return from(Bucket.data.getAll("63369e83ef7bcb002cb95956")) as Observable<ToDo[]>
-
+    return Bucket.data.realtime.getAll("63369e83ef7bcb002cb95956") as RealtimeConnection<ToDo[]>;
   }
 
-  async addTodo(toDo: ToDo) {
+  async addTodo(todo: ToDo) {
     await Bucket.data.insert("63369e83ef7bcb002cb95956", {
-      "title": toDo.title,
-      "expiration_date": toDo.expiration_date
+      "title": todo.title,
+      "expiration_date": todo.expiration_date
     });
   }
 
-  async changeStatus(toDo: ToDo) {
+  async changeStatus(todo: ToDo) {
     Bucket.initialize({ apikey: "dfv2d18l8o719ud", publicUrl: "https://master.spicaengine.com/api" })
 
-    let response = await Bucket.data.update("63369e83ef7bcb002cb95956", "633705e1ef7bcb002cb962bf", {
-      "title": toDo.title
+    let response = await Bucket.data.update("63369e83ef7bcb002cb95956", todo._id, {
+      "title": todo.title,
+      "expiration_date": todo.expiration_date,
+      "completed": todo.completed
+    });
+    console.log("Status changed successfully", response);
+  }
+
+  async updateTodo(todo: ToDo) {
+    let response = await Bucket.data.update("63369e83ef7bcb002cb95956", todo._id, {
+      "title": todo.title,
+      "expiration_date": todo.expiration_date,
+      "completed": todo.completed
     });
     console.log("Updated successfully", response);
   }
+
+  async deleteTodo(todo: ToDo) {
+    let response = await Bucket.data.remove("63369e83ef7bcb002cb95956", todo._id);
+    console.log("Deleted successfully", response);
+  }
+
 }

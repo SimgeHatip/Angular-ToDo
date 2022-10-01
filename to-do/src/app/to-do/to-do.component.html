@@ -8,7 +8,7 @@
 
         <mat-form-field appearance="fill">
             <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker" name="expiration_date" min="{{formatDate()}}" ngModel>
+            <input matInput [matDatepicker]="picker" name="expiration_date" min="{{today}}" ngModel>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
@@ -19,8 +19,6 @@
     </div>
 
 </form>
-
-
 
 <div class="container">
     <div class=" card passed-container">
@@ -65,9 +63,9 @@
 
             </form> -->
 
-            <div class="task">
+            <div class="task" *ngIf="!todo.completed">
                 <div class="todo-list-element">
-                    <mat-checkbox [(ngModel)]="todo.completed" [checked]="todo.completed" color="primary">
+                    <mat-checkbox (click)="changeStasus(todo)" [(ngModel)]="todo.completed" [checked]="todo.completed" color="primary">
                         <li>{{todo.title}} </li>
                         <li>{{todo.expiration_date}}</li>
                     </mat-checkbox>
@@ -82,7 +80,7 @@
                 </div>
                 <div class="">
                     <div class="example-button-container">
-                        <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon">
+                        <button (click)="onDelete(todo)" mat-mini-fab color="warn" aria-label="Example icon button with a menu icon">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </div>
@@ -95,7 +93,7 @@
         <ul *ngFor="let todo of todoList" cdkDrag>
             <div class="task" *ngIf="todo.completed==true">
                 <div class="todo-list-element">
-                    <mat-checkbox id={{todo.title}} [(ngModel)]="todo.completed" [checked]="todo.completed"
+                    <mat-checkbox id={{todo._id}} (click)="changeStasus(todo)" [(ngModel)]="todo.completed" [checked]="todo.completed"
                         color="primary">
                         <li>{{todo.title}} </li>
                         <li>{{todo.expiration_date}}</li>
