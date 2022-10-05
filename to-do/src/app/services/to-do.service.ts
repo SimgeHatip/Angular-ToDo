@@ -38,6 +38,8 @@ export class ToDoService {
   }
 
   async updateTodo(todo: ToDo) {
+    Bucket.initialize({ apikey: "dfv2d18l8o719ud", publicUrl: "https://master.spicaengine.com/api" })
+    
     let response = await Bucket.data.update("63369e83ef7bcb002cb95956", todo._id, {
       "title": todo.title,
       "expiration_date": todo.expiration_date,

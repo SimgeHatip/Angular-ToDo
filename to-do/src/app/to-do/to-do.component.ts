@@ -13,18 +13,15 @@ import { ToDo } from '../models/todo';
 
 export class ToDoComponent implements OnInit {
   mainTitle: string = "TO DO WITH ANGULAR";
+  isVisible: boolean = false;
   today = new Date();
   todoList: ToDo[] = [];
-  uncompletedList: ToDo[] = [];
-  doneList: ToDo[] = [];
-  expiredList: ToDo[] = [];
 
 
   constructor(private todoService: ToDoService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getTodos();
-
   }
 
   getTodos(): void {
@@ -35,19 +32,7 @@ export class ToDoComponent implements OnInit {
     })
   }
 
-  filterTodos(todos: ToDo[]) {
-    todos.forEach(todo => {
-      if (todo.expiration_date < this.today) {
-        this.expiredList.push(todo);
-      }
-      else if (todo.completed) {
-        this.doneList.push(todo);
-      }
-      else {
-        this.uncompletedList.push(todo);
-      }
-    });
-  }
+
   addTodo(form: NgForm): void {
     this.todoService.addTodo(form.value);
   }
@@ -57,12 +42,23 @@ export class ToDoComponent implements OnInit {
     this.todoService.changeStatus(todo);
   }
 
-  updateTodo(todo: ToDo) {
-    this.todoService.updateTodo(todo);
+  updateTodo(form: NgForm, todo: ToDo) {
+    console.log(form.value)
+
+    form.value._id = todo._id;
+    if (form.value.expiration_date == '') {
+      form.value.expiration_date = todo.expiration_date;
+    }
+    this.todoService.updateTodo(form.value);
   }
 
   onDelete(todo: ToDo) {
     this.todoService.deleteTodo(todo);
+  }
+  isExpired(todo: ToDo): boolean {
+    todo.expiration_date = new Date(todo.expiration_date);
+    return (todo.expiration_date.getTime() < this.today.getTime());
+
   }
 
   drop(event: CdkDragDrop<{ id: number; title: string; date: string, completed: boolean }[]>) {
@@ -83,6 +79,9 @@ export class ToDoComponent implements OnInit {
       duration: 2000,
       panelClass: ["custom-style"]
     });
+  }
+  showUpdateForm() {
+    this.isVisible = !this.isVisible;
   }
 
 }
