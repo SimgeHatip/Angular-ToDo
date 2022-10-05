@@ -14,8 +14,13 @@ import { ToDo } from '../models/todo';
 export class ToDoComponent implements OnInit {
   mainTitle: string = "TO DO WITH ANGULAR";
   isVisible: boolean = false;
+  updatedTodoId:string="";
   today = new Date();
   todoList: ToDo[] = [];
+  todos: ToDo[] = [];
+  done: ToDo[] = [];
+  expired: ToDo[] = [];
+
 
 
   constructor(private todoService: ToDoService, private _snackBar: MatSnackBar) { }
@@ -28,22 +33,37 @@ export class ToDoComponent implements OnInit {
     this.todoService.getTodos().subscribe({
       next: (todos: ToDo[]) => {
         this.todoList = todos;
+        this.todos = [];
+        this.done = [];
+        this.expired = [];
+        this.todoList.forEach(todo => {
+          todo.expiration_date = new Date(todo.expiration_date);
+          if (todo.completed) {
+            this.done.push(todo);
+          }
+          else if (todo.expiration_date < this.today) {
+            this.expired.push(todo);
+          }
+          else {
+            this.todos.push(todo);
+          }
+        });
       }
     })
   }
 
   addTodo(form: NgForm): void {
+
     this.todoService.addTodo(form.value);
   }
 
   changeStasus(todo: ToDo) {
+
     todo.completed = !todo.completed;
     this.todoService.changeStatus(todo);
   }
 
   updateTodo(form: NgForm, todo: ToDo) {
-    console.log(form.value)
-
     form.value._id = todo._id;
     if (form.value.expiration_date == '') {
       form.value.expiration_date = todo.expiration_date;
@@ -55,11 +75,6 @@ export class ToDoComponent implements OnInit {
   onDelete(todo: ToDo) {
     this.todoService.deleteTodo(todo);
   }
-  isExpired(todo: ToDo): boolean {
-    todo.expiration_date = new Date(todo.expiration_date);
-    return (todo.expiration_date.getTime() < this.today.getTime());
-
-  }
 
   openSnackBar(task: string) {
     this._snackBar.open("Successfull for " + task, "", {
@@ -67,8 +82,21 @@ export class ToDoComponent implements OnInit {
       panelClass: ["custom-style"]
     });
   }
-  showUpdateForm() {
+  showUpdateForm(todo:ToDo) {
+    this.updatedTodoId= todo._id;
     this.isVisible = !this.isVisible;
   }
 
+  drop(event: CdkDragDrop<ToDo[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
+  }
 }
