@@ -32,7 +32,6 @@ export class ToDoComponent implements OnInit {
     })
   }
 
-
   addTodo(form: NgForm): void {
     this.todoService.addTodo(form.value);
   }
@@ -50,6 +49,7 @@ export class ToDoComponent implements OnInit {
       form.value.expiration_date = todo.expiration_date;
     }
     this.todoService.updateTodo(form.value);
+    this.isVisible = false;
   }
 
   onDelete(todo: ToDo) {
@@ -59,19 +59,6 @@ export class ToDoComponent implements OnInit {
     todo.expiration_date = new Date(todo.expiration_date);
     return (todo.expiration_date.getTime() < this.today.getTime());
 
-  }
-
-  drop(event: CdkDragDrop<{ id: number; title: string; date: string, completed: boolean }[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
-    }
   }
 
   openSnackBar(task: string) {
