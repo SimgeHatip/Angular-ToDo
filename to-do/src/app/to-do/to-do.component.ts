@@ -14,7 +14,7 @@ import { ToDo } from '../models/todo';
 export class ToDoComponent implements OnInit {
   mainTitle: string = "TO DO WITH ANGULAR";
   isVisible: boolean = false;
-  updatedTodoId:string="";
+  updatedTodoId: string = "";
   today = new Date();
   todoList: ToDo[] = [];
   todos: ToDo[] = [];
@@ -53,7 +53,6 @@ export class ToDoComponent implements OnInit {
   }
 
   addTodo(form: NgForm): void {
-
     this.todoService.addTodo(form.value);
   }
 
@@ -82,8 +81,8 @@ export class ToDoComponent implements OnInit {
       panelClass: ["custom-style"]
     });
   }
-  showUpdateForm(todo:ToDo) {
-    this.updatedTodoId= todo._id;
+  showUpdateForm(todo: ToDo) {
+    this.updatedTodoId = todo._id;
     this.isVisible = !this.isVisible;
   }
 
@@ -97,6 +96,12 @@ export class ToDoComponent implements OnInit {
         event.previousIndex,
         event.currentIndex,
       );
+      if (event.previousContainer.id === 'doneList') {
+        this.changeStasus(this.todos[event.currentIndex]);
+      }
+      else {
+        this.changeStasus(this.done[event.currentIndex]);
+      }
     }
   }
 }

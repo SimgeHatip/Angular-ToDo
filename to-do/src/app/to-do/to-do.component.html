@@ -26,7 +26,7 @@
             <ul>
                 <div class="task">
                     <div class="todo-list-element">
-                        <li>{{todo.title}}</li>
+                        <li>{{todo.title | titlecase}}</li>
                         <li>{{todo.expiration_date|date:'short' }}</li>
                     </div>
                     <div class="example-button-container">
@@ -40,14 +40,14 @@
         </ng-container>
     </div>
     <div class="col card m-2 p-3 todo-container">
-        <div cdkDropList [cdkDropListData]="todos" (cdkDropListDropped)="drop($event)">
+        <div cdkDropList id="todoList" [cdkDropListData]="todos" (cdkDropListDropped)="drop($event)">
             <h3>CURRENTLTY TO DO'S</h3>
             <ul *ngFor="let todo of todos" cdkDrag>
                 <div class="task">
                     <div class="todo-list-element">
                         <mat-checkbox (click)="changeStasus(todo)" [(ngModel)]="todo.completed"
                             [checked]="todo.completed" color="primary">
-                            <li>{{todo.title}} </li>
+                            <li>{{todo.title | titlecase}} </li>
                             <li>{{todo.expiration_date|date:'short' }}</li>
                         </mat-checkbox>
                     </div>
@@ -97,14 +97,14 @@
         </div>
     </div>
     <div class="card completed-container">
-        <div cdkDropList [cdkDropListData]="done" (cdkDropListDropped)="drop($event)">
+        <div cdkDropList id="doneList" [cdkDropListData]="done" (cdkDropListDropped)="drop($event)">
             <h3>COMPLATED TASKS</h3>
             <ul *ngFor="let todo of done" cdkDrag>
                 <div class="task">
                     <div class="todo-list-element">
                         <mat-checkbox id={{todo._id}} (click)="changeStasus(todo)" [(ngModel)]="todo.completed"
                             [checked]="todo.completed" color="primary">
-                            <li>{{todo.title}} </li>
+                            <li>{{todo.title | titlecase}} </li>
                             <li>{{todo.expiration_date|date:'short' }}</li>
                         </mat-checkbox>
                     </div>
